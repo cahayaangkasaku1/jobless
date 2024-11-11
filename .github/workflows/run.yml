@@ -17,24 +17,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install selenium
-
-      - name: Download ChromeDriver
-        run: |
-          $chrome_version = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" -ErrorAction SilentlyContinue).pv
-          $chrome_driver_version = (Invoke-RestMethod -Uri "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_" + $chrome_version.Split(".")[0]).Trim()
-          Invoke-WebRequest -Uri "https://chromedriver.storage.googleapis.com/$chrome_driver_version/chromedriver_win32.zip" -OutFile "chromedriver.zip"
-          Expand-Archive -Path "chromedriver.zip" -DestinationPath "."
-          Remove-Item -Path "chromedriver.zip"
-
-      - name: Add ChromeDriver to PATH
-        run: |
-          echo "$(System.DefaultWorkingDirectory)\chromedriver.exe" | Out-File -Encoding ASCII -Append $Env:GITHUB_PATH
 
       - name: Run job script
         run: python job.py
